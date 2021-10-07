@@ -202,10 +202,12 @@ pre code {
 <li>Problemas con los pares</li>
 </ol></li>
 </ul></li>
-<li>1 subescala que mide fortalezas, y no se considera en el putnaje total de dificultades</li>
+<li>1 subescala que mide fortalezas, y no se considera en el putnaje total de dificultades
+<ul>
 <li><ol start="5" style="list-style-type: lower-alpha">
 <li>Conducta prosocial</li>
 </ol></li>
+</ul></li>
 </ul>
 <p>Algunos ejemplos de ítems son <em>‘Cuando me enojo, me enojo mucho y pierdo el control’</em>, o <em>‘Soy más bien solitario/a y tiendo a jugar solo/a’</em>. Su formato de respuesta es tipo <strong>Likert</strong>: (a) No es cierto; (b) Un tanto cierto; (c) Absolutamente cierto. El test tiene un total de 25 ítems.</p>
 </div>
@@ -251,18 +253,14 @@ pre code {
                remotes)</code></pre>
 <p>Ahora descargamos la librería <code>jogRu</code> desde <a href="https://github.com/jogrue/jogRu/">GitHub</a>. Esta nos permitirá calcular el alfa ordinal para las puntuaciones de los ítems de nuestro test, con la función <code>ordinal_alpha()</code>. Si les pregunta si quieren actualizar otros paquetes a nuevas versiones, seleccionar la opción <code>3: None</code>.</p>
 <pre class="r"><code>remotes::install_github(&quot;jogrue/jogRu&quot;, force = T)</code></pre>
-<pre><code>## Downloading GitHub repo jogrue/jogRu@HEAD</code></pre>
 <pre><code>## digest    (0.6.27  -&gt; 0.6.28) [CRAN]
 ## utf8      (1.2.1   -&gt; 1.2.2 ) [CRAN]
 ## tibble    (3.1.2   -&gt; 3.1.5 ) [CRAN]
 ## stringi   (1.6.2   -&gt; 1.7.5 ) [CRAN]
 ## xfun      (0.24    -&gt; 0.26  ) [CRAN]
 ## htmltools (0.5.1.1 -&gt; 0.5.2 ) [CRAN]
-## Hmisc     (4.5-0   -&gt; 4.6-0 ) [CRAN]</code></pre>
-<pre><code>## Installing 7 packages: digest, utf8, tibble, stringi, xfun, htmltools, Hmisc</code></pre>
-<pre><code>## Installing packages into &#39;C:/Users/nicol/OneDrive/Documentos/R/win-library/4.1&#39;
-## (as &#39;lib&#39; is unspecified)</code></pre>
-<pre><code>## 
+## Hmisc     (4.5-0   -&gt; 4.6-0 ) [CRAN]
+## 
 ##   There is a binary version available but the source version is later:
 ##       binary source needs_compilation
 ## Hmisc  4.5-0  4.6-0              TRUE
@@ -276,13 +274,15 @@ pre code {
 ## package &#39;Hmisc&#39; successfully unpacked and MD5 sums checked
 ## 
 ## The downloaded binary packages are in
-##  C:\Users\nicol\AppData\Local\Temp\Rtmpe2LSB3\downloaded_packages
+##  C:\Users\nicol\AppData\Local\Temp\Rtmp2h0PP0\downloaded_packages
 ##   
   
   
-   checking for file &#39;C:\Users\nicol\AppData\Local\Temp\Rtmpe2LSB3\remotes471c575c7e0e\jogrue-jogRu-c659fcd/DESCRIPTION&#39; ...
+   checking for file &#39;C:\Users\nicol\AppData\Local\Temp\Rtmp2h0PP0\remotesbc0603e7b36\jogrue-jogRu-c659fcd/DESCRIPTION&#39; ...
   
-v  checking for file &#39;C:\Users\nicol\AppData\Local\Temp\Rtmpe2LSB3\remotes471c575c7e0e\jogrue-jogRu-c659fcd/DESCRIPTION&#39; (857ms)
+   checking for file &#39;C:\Users\nicol\AppData\Local\Temp\Rtmp2h0PP0\remotesbc0603e7b36\jogrue-jogRu-c659fcd/DESCRIPTION&#39; ... 
+  
+v  checking for file &#39;C:\Users\nicol\AppData\Local\Temp\Rtmp2h0PP0\remotesbc0603e7b36\jogrue-jogRu-c659fcd/DESCRIPTION&#39; (692ms)
 ## 
   
   
@@ -313,8 +313,6 @@ v  checking DESCRIPTION meta-information
   
    
 ## </code></pre>
-<pre><code>## Installing package into &#39;C:/Users/nicol/OneDrive/Documentos/R/win-library/4.1&#39;
-## (as &#39;lib&#39; is unspecified)</code></pre>
 </div>
 <div id="cargar-datos" class="section level2">
 <h2>2. Cargar datos</h2>
