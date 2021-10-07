@@ -1,0 +1,147 @@
+---
+title: "Taller análisis de ítems y fiabilidad"
+author: "Nicolás Godoy Márquez"
+date: "07-10-2021"
+output: 
+  html_document: 
+    highlight: textmate
+    theme: journal
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Curso: Instrumentos para la medición psicológica
+### Facultad de Ciencias Sociales (FACSO), Universidad de Chile
+### Carrera de psicología
+#### Profesora Claudia Zúñiga
+#### Ayudantes: Adriana Acosta y Diego Sandoval
+
+Se trabajará con el instrumento **Strenghts and Difficulties Questionnaire (SDQ)** elaborado por Goodman (1997), en base al trabajo de [Sánchez Gómez (2017)](https://repositorio.uchile.cl/handle/2250/145009), tesis de pregrado de psicología de la Universidad de Chile. 
+
+Este cuestionario es un instrumento de tamizaje, cuyo uso es relevante en la psicopatología infanto-juvenil en miras a la detección temprana de fortalezas y dificultades en contextos escolares. Permite evaluar y tomar decisiones de prevención y tratamiento en una etapa inicial. 
+
+La escala SDQ está formada por *5 subescalas*:
+
+- 4 subescalas miden **dificultades**, sumando el puntaje total:
+  + a) Problemas emocionales;
+  + b) Problemas conductuales;
+  + c) Hiperactividad; y 
+  + d) Problemas con los pares
+  
+- 1 subescala que mide fortalezas, y no se considera en el putnaje total de dificultades
+ + e) Conducta prosocial
+ 
+Algunos ejemplos de ítems son *'Cuando me enojo, me enojo mucho y pierdo el control'*, o *'Soy más bien solitario/a y tiendo a jugar solo/a'*. Su formato de respuesta es tipo **Likert**: (a) No es cierto; (b) Un tanto cierto; (c) Absolutamente cierto. El test tiene un total de 25 ítems.
+
+## Correlación ítem-test
+
+Es el coeficiente de correlación de Pearson calculado para pares de puntajes, donde un ítem de cada par es un **puntaje de ítem** y el otro ítem es el **puntaje total de la prueba**. A mayor valor del coeficiente, mayor es la correlación entre el ítem y la prueba total. Seleccionamos los ítems que tengan una alta correlación con la puntuación total para garantizar que el test tiene **coherencia interna**. La **correlación ítem-test** nos informa si el ítem es un *buen* contribuyente a la **fiabilidad del test**.
+
+El **alfa de Chronbach**, por su aprte, es un estadístico que permite estimar la fiabilidad de un test por **consistencia interna**. Su *ventaja* es que es fácil de estimar. Sus *desventajas*, sin embargo, son que
+
+- Puede aumentarse artificialmente incorporando ítems parecidos;
+- Asume que el constructo es unidimensional;
+- Es afectado por número de ítems el número de alternativas de respuesta y la varianza del test (Domínguez-Lara & Merino-Soto, 2015). 
+
+Para interpretarlo, hay que considerar 
+
+- Mínimo para investigación básica exploratoria: > .7
+- Mínimo para investigación asociativa: > .8
+- Investigación con decisiones muy importantes: > .9 (Nunnally & Bernstein, 1994). 
+
+**ADVERTENCIA**: el alfa de Chronbarch es para variables con **nivel de medición intervalar**. Lo óptimo para variables ordinales es Alfa Ordinal u Omega (Ventura-León & Caycho-Rodríguez, 2017). 
+
+Asimismo, esperamos que la correlación de cada ítem respecto del total sea al menos de .4 (media) y, ojalá, de al menos .6 (alta). Ítems con correlaciones muy bajas podrían eliminarse, especialmente si el alfa de Chronbach aumenta en caso de que el ítem sea eliminado. 
+
+# Procesamiento
+
+## 1. Cargar librerías
+
+Para el presente ejercicio, utilizaremos las siguientes librerías:
+
+1. `pacman`: para cargar librerías
+1. `tidyverse`: universo de librerías
+1. `haven`: parte de tidyverse, para cargar datos .sav
+1. `dplyr`: parte de tidyverse, para manipular datos
+1. `sjmisc`: para explorar datos
+1. `psych`: para realizar el análisis de fiabilidad
+1. `remotes``: para descargar librería con función para alfa ordinal 
+
+*NOTA*: si no ha instalado `pacman` con anterioridad, debe correr el código `install.packages("pacman")` antes de cargar el resto de librerías con `pacman::p_load()`
+
+```{r library, warning=F}
+pacman::p_load(tidyverse,
+               haven,
+               dplyr,
+               psych,
+               remotes)
+```
+
+Ahora descargamos la librería `jogRu` desde [GitHub](https://github.com/jogrue/jogRu/). Esta nos permitirá calcular el alfa ordinal para las puntuaciones de los ítems de nuestro test, con la función `ordinal_alpha()`. Si les pregunta si quieren actualizar otros paquetes a nuevas versiones, seleccionar la opción `3: None`.
+
+```{r install_jogRu, warning=FALSE}
+remotes::install_github("jogrue/jogRu", force = T)
+```
+
+## 2. Cargar datos
+
+Cargamos los datos **Base_SPSS_371.sav** presentes en la carpeta input. Utilizaremos la función `read_sav()` de `haven`
+
+```{r read_sav}
+datos <- read_sav("../input/Base_SPSS_371.sav")
+```
+
+### 2.1 Crear objetos para cada subescala
+
+Antes, crearemos objetos nuevos para la subescala prosocial y para dificultades en su conjunto, a modo de poder medir la consistencia interna de cada uno. Utilizamos la función `select()` de `dplyr`
+
+```{r objeto_escala}
+
+#Conducta prosocial
+prosoc <- datos %>% select(i20, i17, i9, i4, i1)
+
+#Dificultades (total)
+dificultades <- datos %>% select(-c(1, i20, i17, i9, i4, i1, 27:32))
+
+```
+
+
+## 3. Correlación item-test
+
+Utilizaremos la función `alpha()` de la librería `psych` para calcular el **Alfa de Chronbach** de cada subescala, así como para dificultades en términos globales:  
+
+```{r chronbach_prosoc}
+alpha(prosoc)
+```
+
+Para la subescala prosocial, las correlaciones son de al menos .59, de modo que no consideramos eliminar ningún ítem. 
+
+```{r chronbach_dificultades}
+alpha(dificultades)
+```
+
+Como se puede ver, el alfa de Chronbach para la escala total de dificultades es de **.78**, por lo cual cumple con el mínimo para investigación básica exploratoria. Es decir, el nivel de confiabilidad es aceptable. 
+
+El ítem i11 presenta una correlación de .17 con el puntaje total del test, de modo que puede evaluarse su eliminación. Eliminemos y calculemos el alpha de Chronbach para dificultades 
+
+```{r chronbach_sin_i11}
+dificultades_proc <- select(dificultades, -i11)
+alpha(dificultades)
+```
+
+Ya no necesitamos seguir eliminando ítems, por lo que damos por finalizado el análisis de fiabilidad. El proceso es iterativo, y siempre eliminamos un ítem a la vez. 
+
+## 4. Alfa ordinal
+
+Como se señaló, el alfa de Chronbach está diseñado para variables continuas. Por ello, podemos calcular el **alfa ordinal** para las puntuaciones de cada ítem. Utilizaremos la función `ordinal_alpha()` de `jogRu`, que estima el alfa ordinal a partir de correlación policórica (según lo propuesto por Zumbo et al.(2007)). 
+
+```{r ordinal_dif}
+jogRu::ordinal_alpha(dificultades)
+```
+
+```{r ordinal_prosoc}
+jogRu::ordinal_alpha(prosoc)
+```
+
